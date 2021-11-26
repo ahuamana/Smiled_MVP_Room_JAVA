@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="15dp"
+    android:backgroundTint="@color/white"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:padding="15dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:text="Nueva Actividad"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            app:cardCornerRadius="15dp"
+            android:backgroundTint="#CACACA"
+            android:layout_marginBottom="15dp"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@null"
+                android:hint="Titulo"
+                android:lines="2"
+                android:text=""
+                android:textColorHint="#99202020"
+                android:textSize="14dp" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            app:cardCornerRadius="15dp"
+            android:backgroundTint="#CACACA"
+            android:layout_marginBottom="15dp"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/contenido"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text=""
+                android:textSize="14dp"
+                android:textColorHint="#99202020"
+                android:background="@null"
+                android:lines="5"
+                android:gravity="start"
+                android:paddingTop="3dp"
+                android:hint="Contenido"
+                android:layout_height="wrap_content"/>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            app:cardCornerRadius="15dp"
+            android:backgroundTint="#CACACA"
+            android:layout_marginBottom="25dp"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fecha_fin"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text=""
+                android:textSize="14dp"
+                android:textColorHint="#99202020"
+                android:background="@null"
+                android:lines="3"
+                android:gravity="center_vertical"
+                android:paddingTop="3dp"
+                android:hint="Finaliza (dd/mm/yyyy)"
+                android:layout_height="wrap_content"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:text="Cancelar"
+                android:layout_marginEnd="5dp"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ok_button"
+                android:layout_width="wrap_content"
+                android:text="Aceptar"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
