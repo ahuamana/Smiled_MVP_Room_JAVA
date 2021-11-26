@@ -1,6 +1,7 @@
 package com.paparazziapps.mvp_smiled_java_room;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.paparazziapps.mvp_smiled_java_room.appdatabase.AppDatabase;
 import com.paparazziapps.mvp_smiled_java_room.databinding.ActivityMainBinding;
 import com.paparazziapps.mvp_smiled_java_room.databinding.CardviewAddActivityBinding;
+import com.paparazziapps.mvp_smiled_java_room.databinding.ToolbarBinding;
 import com.paparazziapps.mvp_smiled_java_room.interfaces.ActividadDAO;
 import com.paparazziapps.mvp_smiled_java_room.models.Actividad;
 
@@ -40,7 +42,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        showToolbar();
+
     }
+
+    private void showToolbar() {
+        setSupportActionBar(binding.mytoolbar.getRoot());
+    }
+
 
     private void showDialog() {
 
