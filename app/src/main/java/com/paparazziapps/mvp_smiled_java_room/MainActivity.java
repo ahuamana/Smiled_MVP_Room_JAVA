@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayoutManager mLinearLayoutManager;
     ActividadesAdapter mAdapter;
 
+    List<Actividad> lista;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
 
 
-                    List<Actividad> lista = mActividadDAO.getallActividades();
+                    lista = mActividadDAO.getallActividades();
 
                     if(lista.size() >= 0)
                     {
@@ -164,6 +166,12 @@ public class MainActivity extends AppCompatActivity {
 
                             Toast.makeText(MainActivity.this, "Actividad Creada!", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
+
+                            //implement observer to update -- Ojo
+                            lista.add(actividad);
+                            mAdapter= new ActividadesAdapter(lista, getApplicationContext());
+                            binding.recyclerview.setAdapter(mAdapter);
+                            mAdapter.notifyDataSetChanged();
                         }
                     });
 
@@ -174,4 +182,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 }
