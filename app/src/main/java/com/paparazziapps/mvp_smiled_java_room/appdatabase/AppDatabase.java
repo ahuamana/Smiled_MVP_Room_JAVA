@@ -19,18 +19,18 @@ import com.paparazziapps.mvp_smiled_java_room.models.Comentario;
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String dbName = "schoolDB";
-    private static AppDatabase schoolDatabase;
+    private static AppDatabase instance;
 
-    public static synchronized AppDatabase getUserDatabase(Context context)
+    public static synchronized AppDatabase getInstanceDatabase(Context context)
     {
-        if(schoolDatabase == null)
+        if(instance == null)
         {
-            schoolDatabase = Room.databaseBuilder(context,AppDatabase.class, dbName)
-                    .fallbackToDestructiveMigration()
+            instance = Room.databaseBuilder(context,AppDatabase.class, dbName)
+                    .allowMainThreadQueries()
                     .build();
         }
 
-        return schoolDatabase;
+        return instance;
     }
 
     public abstract ActividadDAO actividadDAO();
