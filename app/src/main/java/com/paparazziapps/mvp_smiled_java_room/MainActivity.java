@@ -2,13 +2,16 @@ package com.paparazziapps.mvp_smiled_java_room;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.paparazziapps.mvp_smiled_java_room.adapters.ActividadesAdapter;
 import com.paparazziapps.mvp_smiled_java_room.appdatabase.AppDatabase;
 import com.paparazziapps.mvp_smiled_java_room.databinding.ActivityMainBinding;
 import com.paparazziapps.mvp_smiled_java_room.databinding.CardviewAddActivityBinding;
@@ -17,7 +20,9 @@ import com.paparazziapps.mvp_smiled_java_room.interfaces.ActividadDAO;
 import com.paparazziapps.mvp_smiled_java_room.models.Actividad;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -28,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     Actividad mActividad;
     AppDatabase mAppDatabase;
     ActividadDAO mActividadDAO;
+
+    LinearLayoutManager mLinearLayoutManager;
+    ActividadesAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,45 @@ public class MainActivity extends AppCompatActivity {
         });
 
         showToolbar();
+
+        listallActivities();
+
+    }
+
+    private void listallActivities() {
+
+        mAppDatabase = AppDatabase.getUserDatabase(getApplicationContext()); // instancia a la dabase de datos
+        mActividadDAO = mAppDatabase.actividadDAO(); // crea la lista de consultar a utilizar
+
+
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    List<Actividad> lista = mActividadDAO.getallActividades();
+
+                    if(lista.size() >= 0)
+                    {
+                        mLinearLayoutManager = new LinearLayoutManager(MainActivity.this);
+
+
+                        binding.recyclerview.setLayoutManager(mLinearLayoutManager);
+                        mLinearLayoutManager.setStackFromEnd(true);
+                        mAdapter= new ActividadesAdapter(lista,getApplicationContext());
+
+                        binding.recyclerview.setAdapter(mAdapter);
+
+                    }else
+                    {
+                        Log.e("TAG","Actividades vacias");
+                    }
+
+
+
+                }
+            }).start();
 
     }
 
