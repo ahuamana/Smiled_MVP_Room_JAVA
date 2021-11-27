@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,7 +63,18 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
         holder.binding.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
                 Log.e("TAG","Checked: "+ holder.binding.checkBox.isChecked());
+                if(holder.binding.checkBox.isChecked())
+                {
+
+                    Toast.makeText(context,"Changed State: "+ holder.binding.checkBox.isChecked(),Toast.LENGTH_SHORT).show();
+
+                }else
+                {
+                    Toast.makeText(context,"Changed State: "+ holder.binding.checkBox.isChecked(),Toast.LENGTH_SHORT).show();
+                }
+                //end checked
             }
         });
 

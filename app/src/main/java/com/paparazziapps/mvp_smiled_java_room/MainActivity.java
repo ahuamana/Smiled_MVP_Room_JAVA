@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     AppDatabase mAppDatabase;
     ActividadDAO mActividadDAO;
 
-    LinearLayoutManager mLinearLayoutManager,mLinearLayoutManager2;
+    LinearLayoutManager mLinearLayoutManager;
     ActividadesAdapter mAdapter;
 
     List<Actividad> lista, lista2;
@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
                 showDialog();
             }
         });
+
+
 
         showToolbar();
 
@@ -109,12 +111,12 @@ public class MainActivity extends AppCompatActivity {
 
                 if(lista2.size() >= 0)
                 {
-                    mLinearLayoutManager2 = new LinearLayoutManager(MainActivity.this);
-                    binding.recyclerviewCompleted.setLayoutManager(mLinearLayoutManager2);
-                    mLinearLayoutManager2.setStackFromEnd(true);
+                    mLinearLayoutManager = new LinearLayoutManager(MainActivity.this);
+                    binding.recyclerviewCompleted.setLayoutManager(mLinearLayoutManager);
                     mAdapter= new ActividadesAdapter(lista2,getApplicationContext());
 
                     binding.recyclerviewCompleted.setAdapter(mAdapter);
+
 
                 }else
                 {
@@ -143,10 +145,7 @@ public class MainActivity extends AppCompatActivity {
                     if(lista.size() >= 0)
                     {
                         mLinearLayoutManager = new LinearLayoutManager(MainActivity.this);
-
-
                         binding.recyclerview.setLayoutManager(mLinearLayoutManager);
-                        mLinearLayoutManager.setStackFromEnd(true);
                         mAdapter= new ActividadesAdapter(lista,getApplicationContext());
 
                         binding.recyclerview.setAdapter(mAdapter);
