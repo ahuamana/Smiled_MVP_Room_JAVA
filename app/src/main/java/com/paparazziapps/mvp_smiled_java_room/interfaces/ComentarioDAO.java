@@ -14,6 +14,7 @@ public interface ComentarioDAO {
     @Insert
     void crearComentario(Comentario comentario);
 
+
     @Query("Select * from comentarios where codigo_actividad = (:codigoReceived) order by unixtime desc ")
-    List<Comentario> getAllComentsByUser(String codigoReceived);
+    List<Comentario> getAllComentsByActividad(int codigoReceived);
 }
