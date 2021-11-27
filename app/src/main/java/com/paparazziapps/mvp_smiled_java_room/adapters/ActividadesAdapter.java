@@ -40,7 +40,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
         Log.e("TAG","ADAPTER WORKING");
         //All code Here
 
-        holder.binding.activityNumber.setText("0"+String.valueOf(mListActividades.get(position).codigo));
+        holder.binding.activityNumber.setText("0"+ (mListActividades.size() - position));
         holder.binding.titulo.setText( String.valueOf(mListActividades.get(position).titulo));
         holder.binding.descripcion.setText(String.valueOf(mListActividades.get(position).contenido));
 
