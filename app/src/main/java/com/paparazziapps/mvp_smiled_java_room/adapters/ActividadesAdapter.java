@@ -1,10 +1,13 @@
 package com.paparazziapps.mvp_smiled_java_room.adapters;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +53,18 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
             holder.binding.checkBox.setChecked(true);
         }
 
+        updateStatusActivities(holder, position);
+
+    }
+
+    private void updateStatusActivities(ViewHolder holder, int position) {
+
+        holder.binding.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Log.e("TAG","Checked: "+ holder.binding.checkBox.isChecked());
+            }
+        });
 
     }
 

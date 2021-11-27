@@ -56,9 +56,10 @@ public class MainActivity extends AppCompatActivity {
         listaOnActivities();
         listaCompletedActivities();
 
-
         setOptionsActivities();
     }
+
+
 
     private void setOptionsActivities() {
 
