@@ -1,6 +1,7 @@
 package com.paparazziapps.mvp_smiled_java_room.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.paparazziapps.mvp_smiled_java_room.activities.ActividadInfoActivity;
 import com.paparazziapps.mvp_smiled_java_room.databinding.CardviewActividadBinding;
 import com.paparazziapps.mvp_smiled_java_room.models.Actividad;
 
@@ -54,8 +56,28 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
             holder.binding.checkBox.setChecked(true);
         }
 
+        openDetailsActivity(holder, position);
+
         updateStatusActivities(holder, position);
 
+    }
+
+    private void openDetailsActivity(ViewHolder holder, int position) {
+
+        holder.binding.cardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(context, ActividadInfoActivity.class);
+                i.putExtra("titulo",mListActividades.get(position).titulo);
+                i.putExtra("descripcion",mListActividades.get(position).contenido);
+                i.putExtra("fecha_inicio",mListActividades.get(position).fecha_inicio);
+                i.putExtra("fecha_fin",mListActividades.get(position).fecha_fin);
+                i.putExtra("codigoActividad",mListActividades.get(position).codigo);
+                context.startActivity(i);
+
+            }
+        });
     }
 
     private void updateStatusActivities(ViewHolder holder, int position) {

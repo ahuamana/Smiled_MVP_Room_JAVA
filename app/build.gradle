@@ -47,4 +47,6 @@ dependencies {
 
     //see database room
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }
