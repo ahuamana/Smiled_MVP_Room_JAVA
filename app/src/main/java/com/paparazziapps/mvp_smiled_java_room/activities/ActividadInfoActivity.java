@@ -1,6 +1,8 @@
 package com.paparazziapps.mvp_smiled_java_room.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
@@ -8,8 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.paparazziapps.mvp_smiled_java_room.MainActivity;
-import com.paparazziapps.mvp_smiled_java_room.adapters.ActividadesAdapter;
+import com.paparazziapps.mvp_smiled_java_room.ViewModels.ActividadInfoViewModel;
 import com.paparazziapps.mvp_smiled_java_room.adapters.ComentariosAdapter;
 import com.paparazziapps.mvp_smiled_java_room.appdatabase.AppDatabase;
 import com.paparazziapps.mvp_smiled_java_room.databinding.ActivityActividadInfoBinding;
@@ -22,8 +23,10 @@ public class ActividadInfoActivity extends AppCompatActivity {
 
     ActivityActividadInfoBinding binding;
 
-    AppDatabase mAppDatabase;
-    ComentarioDAO mComentarioDAO;
+    ActividadInfoViewModel viewModel;
+
+
+
     Comentario mComentario;
 
     LinearLayoutManager mLinearLayoutManager;
@@ -36,9 +39,7 @@ public class ActividadInfoActivity extends AppCompatActivity {
         binding = ActivityActividadInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //Previuos Code
-        mAppDatabase = AppDatabase.getUserDatabase(getApplicationContext());
-        mComentarioDAO = mAppDatabase.comentarioDAO();
+        initViewModel();
 
         //all code here
         showToolbar();
@@ -52,53 +53,40 @@ public class ActividadInfoActivity extends AppCompatActivity {
 
     private void createComment() {
 
-
         binding.send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
+            String message = binding.editTextMessage.getText().toString();
 
-                        String message = binding.editTextMessage.getText().toString();
+            if(message != null)
+            {
+                if(!message.isEmpty())
+                {
+                    mComentario = new Comentario();
+                    int codReceiver= getIntent().getIntExtra("codigoActividad",1000);
+                    mComentario.setCodigo_actividad(codReceiver);
+                    mComentario.setMensaje(message);
+                    mComentario.setUnixtime(System.currentTimeMillis() / 1000);
 
-                        if(message != null)
-                        {
-                            if(!message.isEmpty())
-                            {
-
-                                mComentario = new Comentario();
-                                mComentario.setCodigo_actividad(getIntent().getIntExtra("codigoActividad",1000));
-                                mComentario.setMensaje(message);
-                                mComentario.setUnixtime(System.currentTimeMillis() / 1000);
-
-                                mComentarioDAO.crearComentario(mComentario);
+                    //mComentarioDAO.crearComentario(mComentario);
+                    viewModel.insertComentario(mComentario,codReceiver);
 
 
-                                //Main Threat
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getApplicationContext(), "Actividad Creada!", Toast.LENGTH_SHORT).show();
-                                        binding.editTextMessage.setText("");
-
-                                    }
-                                });
-
-                            }else
-                            {
-                                Log.e("TAG","Mensaje Vacio");
-                            }
-
-                        }else
-                        {
-                            Log.e("TAG","Mensaje Nulo");
-                        }
+                            Toast.makeText(getApplicationContext(), "Actividad Creada!", Toast.LENGTH_SHORT).show();
+                            binding.editTextMessage.setText("");
 
 
-                    }
-                }).start();
+                }else
+                {
+                    Log.e("TAG","Mensaje Vacio");
+                }
+
+            }else
+            {
+                Log.e("TAG","Mensaje Nulo");
+            }
+
 
             }
         });
@@ -138,12 +126,14 @@ public class ActividadInfoActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                lista = mComentarioDAO.getAllComentsByActividad(codigoActividad);
+                //lista = mComentarioDAO.getAllComentsByActividad(codigoActividad);
+                lista = viewModel.returnAllComentariosList(codigoActividad);
 
                 if(lista.size() >= 0)
                 {
                     mLinearLayoutManager = new LinearLayoutManager(ActividadInfoActivity.this);
-                    mAdapter= new ComentariosAdapter(getApplicationContext(), lista);
+                    mAdapter= new ComentariosAdapter(getApplicationContext());
+                    mAdapter.setComentariosList(lista);
                     binding.recyclerview.setLayoutManager(mLinearLayoutManager);
                     binding.recyclerview.setAdapter(mAdapter);
 
@@ -166,5 +156,27 @@ public class ActividadInfoActivity extends AppCompatActivity {
         binding.mytoolbar.imageVisibility.setVisibility(View.GONE);
         binding.mytoolbar.linearEditDelete.setVisibility(View.VISIBLE);
         setSupportActionBar(binding.mytoolbar.getRoot());
+    }
+
+    private void initViewModel()
+    {
+        viewModel = new ViewModelProvider(this).get(ActividadInfoViewModel.class);
+        viewModel.getComentarioListObserver().observe(this, new Observer<List<Comentario>>() {
+            @Override
+            public void onChanged(List<Comentario> comentarios) {
+                if(comentarios == null)
+                {
+                    Log.e("TAG","NO COMENTARIOS");
+                }else
+                {
+                    //Update recycler each time
+                    Log.e("TAG","UPDATE SQL");
+                    mAdapter.setComentariosList(comentarios);
+                    //show in the recyclerview
+                }
+            }
+        });
+
+
     }
 }

@@ -19,11 +19,18 @@ public class ComentariosAdapter  extends RecyclerView.Adapter<ComentariosAdapter
     Context context;
     List<Comentario> mListComentarios;
 
-    public ComentariosAdapter (Context context, List<Comentario> mListComentarios)
+    public ComentariosAdapter (Context context)
     {
         this.context = context;
-        this.mListComentarios= mListComentarios;
     }
+
+    public void setComentariosList(List<Comentario> mListComentarios)
+    {
+        this.mListComentarios= mListComentarios;
+        notifyDataSetChanged();
+    }
+
+
 
     @NonNull
     @Override

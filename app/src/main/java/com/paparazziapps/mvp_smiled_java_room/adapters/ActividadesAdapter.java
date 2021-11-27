@@ -25,10 +25,15 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
     Context context;
     List<Actividad> mListActividades;
 
-    public ActividadesAdapter(List<Actividad> mListActividades, Context context)
+    public ActividadesAdapter(Context context)
     {
         this.context = context;
+    }
+
+    public void setActividadesList(List<Actividad> mListActividades)
+    {
         this.mListActividades= mListActividades;
+        notifyDataSetChanged();
     }
 
 

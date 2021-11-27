@@ -1,6 +1,8 @@
 package com.paparazziapps.mvp_smiled_java_room;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Dialog;
@@ -10,11 +12,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.paparazziapps.mvp_smiled_java_room.ViewModels.MainActivityViewModel;
 import com.paparazziapps.mvp_smiled_java_room.adapters.ActividadesAdapter;
-import com.paparazziapps.mvp_smiled_java_room.appdatabase.AppDatabase;
 import com.paparazziapps.mvp_smiled_java_room.databinding.ActivityMainBinding;
 import com.paparazziapps.mvp_smiled_java_room.databinding.CardviewAddActivityBinding;
-import com.paparazziapps.mvp_smiled_java_room.interfaces.ActividadDAO;
 import com.paparazziapps.mvp_smiled_java_room.models.Actividad;
 
 import java.text.SimpleDateFormat;
@@ -26,10 +27,9 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
+    MainActivityViewModel viewModel;
 
     Actividad mActividad;
-    AppDatabase mAppDatabase;
-    ActividadDAO mActividadDAO;
 
     LinearLayoutManager mLinearLayoutManager;
     ActividadesAdapter mAdapter;
@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //Constructores
+        mAdapter= new ActividadesAdapter( getApplicationContext());
+        mLinearLayoutManager = new LinearLayoutManager(MainActivity.this);
+
+
         binding.fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        initViewModel();
 
         showToolbar();
 
@@ -60,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         setOptionsActivities();
     }
-
 
 
     private void setOptionsActivities() {
@@ -99,21 +103,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void listaCompletedActivities() {
 
-        mAppDatabase = AppDatabase.getUserDatabase(getApplicationContext()); // instancia a la dabase de datos
-        mActividadDAO = mAppDatabase.actividadDAO(); // crea la lista de consultar a utilizar
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
 
-                lista2 = mActividadDAO.getCompletedActividades();
+                lista2 = viewModel.getAllActivitiesCompleted();
 
                 if(lista2.size() >= 0)
                 {
-                    mLinearLayoutManager = new LinearLayoutManager(MainActivity.this);
-                    mAdapter= new ActividadesAdapter(lista2,getApplicationContext());
+
+
+                    mAdapter.setActividadesList(lista2);
                     binding.recyclerviewCompleted.setAdapter(mAdapter);
+
 
 
                 }else
@@ -130,22 +134,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void listaOnActivities() {
 
-        mAppDatabase = AppDatabase.getUserDatabase(getApplicationContext()); // instancia a la dabase de datos
-        mActividadDAO = mAppDatabase.actividadDAO(); // crea la lista de consultar a utilizar
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
 
 
-                    lista = mActividadDAO.getallActividades();
+                    lista = viewModel.getAllActivitiesNotCompleted();
 
                     if(lista.size() >= 0)
                     {
-                        mLinearLayoutManager = new LinearLayoutManager(MainActivity.this);
                         binding.recyclerview.setLayoutManager(mLinearLayoutManager);
-                        mAdapter= new ActividadesAdapter(lista,getApplicationContext());
-
+                        mAdapter.setActividadesList(lista);
                         binding.recyclerview.setAdapter(mAdapter);
 
                     }else
@@ -214,15 +213,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void crearActividad(Actividad actividad, Dialog dialog) {
 
-        mAppDatabase = AppDatabase.getUserDatabase(getApplicationContext()); // instancia a la dabase de datos
-        mActividadDAO = mAppDatabase.actividadDAO();
 
         if(actividad != null)
         {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    mActividadDAO.createActividad(actividad);
+
+                    viewModel.crearActividad(actividad);
 
                     //start UIThead to show toast
                     runOnUiThread(new Runnable() {
@@ -232,11 +230,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Actividad Creada!", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
 
-                            //implement observer to update -- Ojo
-                            lista.add(actividad);
-                            mAdapter= new ActividadesAdapter(lista, getApplicationContext());
-                            binding.recyclerview.setAdapter(mAdapter);
-                            mAdapter.notifyDataSetChanged();
+
                         }
                     });
 
@@ -245,6 +239,41 @@ public class MainActivity extends AppCompatActivity {
                 }
             }).start();
         }
+
+    }
+
+    private void initViewModel() {
+
+        viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        viewModel.getActividadesListObserver().observe(this, new Observer<List<Actividad>>() {
+            @Override
+            public void onChanged(List<Actividad> actividads) {
+
+                if(actividads == null)
+                {
+                    Log.e("TAG","NO Actividades");
+                }else
+                {
+                    mAdapter.setActividadesList(actividads);
+                }
+
+            }
+        });
+
+        viewModel.getActividadesListCompletedObserver().observe(this, new Observer<List<Actividad>>() {
+            @Override
+            public void onChanged(List<Actividad> actividads) {
+
+                if(actividads == null)
+                {
+                    Log.e("TAG","NO Actividades");
+                }else
+                {
+                    mAdapter.setActividadesList(actividads);
+                }
+
+            }
+        });
 
     }
 
