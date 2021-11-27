@@ -14,14 +14,12 @@ import java.util.List;
 public class MainActivityViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Actividad>> listOfActividades;
-    private MutableLiveData<List<Actividad>> listOfActividadesCompleted;
     AppDatabase appDatabase;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
 
         listOfActividades = new MutableLiveData<>();
-        listOfActividadesCompleted = new MutableLiveData<>();
         appDatabase = AppDatabase.getInstanceDatabase(getApplication().getApplicationContext());
     }
 
@@ -30,10 +28,6 @@ public class MainActivityViewModel extends AndroidViewModel {
         return listOfActividades;
     }
 
-    public MutableLiveData<List<Actividad>> getActividadesListCompletedObserver()
-    {
-        return listOfActividadesCompleted;
-    }
 
     public List<Actividad> getAllActivitiesNotCompleted()
     {
@@ -56,10 +50,10 @@ public class MainActivityViewModel extends AndroidViewModel {
 
         if(actividadListCompleted.size()>0)
         {
-            listOfActividadesCompleted.postValue(actividadListCompleted);
+            listOfActividades.postValue(actividadListCompleted);
         }else
         {
-            listOfActividadesCompleted.postValue(null);
+            listOfActividades.postValue(null);
         }
 
         return actividadListCompleted;
@@ -77,6 +71,20 @@ public class MainActivityViewModel extends AndroidViewModel {
             }
         }).start();
     }
+
+
+    public void getActividadesCompleted()
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                getAllActivitiesCompleted();
+
+            }
+        }).start();
+    }
+
 
 
 

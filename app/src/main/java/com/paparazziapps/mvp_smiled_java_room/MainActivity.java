@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayoutManager mLinearLayoutManager;
     ActividadesAdapter mAdapter;
 
-    List<Actividad> lista, lista2;
+    List<Actividad> lista;
 
     boolean on;
 
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         showToolbar();
 
         listaOnActivities();
-        listaCompletedActivities();
+
 
         setOptionsActivities();
     }
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOptionsActivities() {
 
-        on = true;
+        on = false;
 
         binding.mytoolbar.imageVisibility.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,17 +80,15 @@ public class MainActivity extends AppCompatActivity {
                 {
                     on = !on;
                     binding.mytoolbar.imageVisibility.setImageResource(R.drawable.ic_visibility_off);
-                    binding.recyclerview.setVisibility(View.GONE);
-                    binding.recyclerviewCompleted.setVisibility(View.VISIBLE);
                     //Implement recycler with
+                    viewModel.getAllActivitiesNotCompleted();
 
                 }else
                 {
                     on = !on;
                     binding.mytoolbar.imageVisibility.setImageResource(R.drawable.ic_visibility);
-                    binding.recyclerview.setVisibility(View.VISIBLE);
-                    binding.recyclerviewCompleted.setVisibility(View.GONE);
-                    //
+                    viewModel.getActividadesCompleted();
+
 
 
                 }
@@ -101,36 +99,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void listaCompletedActivities() {
-
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-
-                lista2 = viewModel.getAllActivitiesCompleted();
-
-                if(lista2.size() >= 0)
-                {
-
-
-                    mAdapter.setActividadesList(lista2);
-                    binding.recyclerviewCompleted.setAdapter(mAdapter);
-
-
-
-                }else
-                {
-                    Log.e("TAG","Actividades vacias");
-                }
-
-
-
-            }
-        }).start();
-
-    }
 
     private void listaOnActivities() {
 
@@ -216,28 +184,11 @@ public class MainActivity extends AppCompatActivity {
 
         if(actividad != null)
         {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
+            viewModel.crearActividad(actividad);
 
-                    viewModel.crearActividad(actividad);
+            Toast.makeText(MainActivity.this, "Actividad Creada!", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
 
-                    //start UIThead to show toast
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Toast.makeText(MainActivity.this, "Actividad Creada!", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-
-
-                        }
-                    });
-
-
-                    //end runnable
-                }
-            }).start();
         }
 
     }
@@ -260,20 +211,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getActividadesListCompletedObserver().observe(this, new Observer<List<Actividad>>() {
-            @Override
-            public void onChanged(List<Actividad> actividads) {
 
-                if(actividads == null)
-                {
-                    Log.e("TAG","NO Actividades");
-                }else
-                {
-                    mAdapter.setActividadesList(actividads);
-                }
-
-            }
-        });
 
     }
 
