@@ -15,6 +15,9 @@ public interface ActividadDAO {
     @Insert
     void createActividad(Actividad actividad);
 
-    @Query("Select * from actividades order by codigo desc")
+    @Query("Select * from actividades where completed = 0 order by codigo desc")
     List<Actividad> getallActividades();
+
+    @Query("Select * from actividades where completed = 1 order by codigo desc")
+    List<Actividad> getCompletedActividades();
 }

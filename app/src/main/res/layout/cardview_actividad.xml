@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:text="Tarea de Matematicas"
+                    android:text="Ejemplo Titulo"
                     android:layout_height="wrap_content"/>
 
                 <CheckBox

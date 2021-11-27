@@ -37,9 +37,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
     @Override
     public void onBindViewHolder(@NonNull ActividadesAdapter.ViewHolder holder, int position) {
 
-        Log.e("TAG","ADAPTER WORKING");
-        //All code Here
-
+        Log.e("TAG UNCOMPLETED","TAREA: "+ mListActividades.get(position).titulo);
         holder.binding.activityNumber.setText("0"+ (mListActividades.size() - position));
         holder.binding.titulo.setText( String.valueOf(mListActividades.get(position).titulo));
         holder.binding.descripcion.setText(String.valueOf(mListActividades.get(position).contenido));
@@ -47,6 +45,10 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
         holder.binding.fechaInicio.setText(String.valueOf(mListActividades.get(position).fecha_inicio));
         holder.binding.fechaFin.setText(String.valueOf(mListActividades.get(position).fecha_fin));
 
+        if(mListActividades.get(position).isCompleted())
+        {
+            holder.binding.checkBox.setChecked(true);
+        }
 
 
     }

@@ -1,7 +1,6 @@
 package com.paparazziapps.mvp_smiled_java_room;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Dialog;
@@ -15,12 +14,10 @@ import com.paparazziapps.mvp_smiled_java_room.adapters.ActividadesAdapter;
 import com.paparazziapps.mvp_smiled_java_room.appdatabase.AppDatabase;
 import com.paparazziapps.mvp_smiled_java_room.databinding.ActivityMainBinding;
 import com.paparazziapps.mvp_smiled_java_room.databinding.CardviewAddActivityBinding;
-import com.paparazziapps.mvp_smiled_java_room.databinding.ToolbarBinding;
 import com.paparazziapps.mvp_smiled_java_room.interfaces.ActividadDAO;
 import com.paparazziapps.mvp_smiled_java_room.models.Actividad;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -34,10 +31,12 @@ public class MainActivity extends AppCompatActivity {
     AppDatabase mAppDatabase;
     ActividadDAO mActividadDAO;
 
-    LinearLayoutManager mLinearLayoutManager;
+    LinearLayoutManager mLinearLayoutManager,mLinearLayoutManager2;
     ActividadesAdapter mAdapter;
 
-    List<Actividad> lista;
+    List<Actividad> lista, lista2;
+
+    boolean on;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +53,84 @@ public class MainActivity extends AppCompatActivity {
 
         showToolbar();
 
-        listallActivities();
+        listaOnActivities();
+        listaCompletedActivities();
+
+
+        setOptionsActivities();
+    }
+
+    private void setOptionsActivities() {
+
+        on = true;
+
+        binding.mytoolbar.imageVisibility.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                if(on == true)
+                {
+                    on = !on;
+                    binding.mytoolbar.imageVisibility.setImageResource(R.drawable.ic_visibility_off);
+                    binding.recyclerview.setVisibility(View.GONE);
+                    binding.recyclerviewCompleted.setVisibility(View.VISIBLE);
+                    //Implement recycler with
+
+                }else
+                {
+                    on = !on;
+                    binding.mytoolbar.imageVisibility.setImageResource(R.drawable.ic_visibility);
+                    binding.recyclerview.setVisibility(View.VISIBLE);
+                    binding.recyclerviewCompleted.setVisibility(View.GONE);
+                    //
+
+
+                }
+
+
+            }
+        });
 
     }
 
-    private void listallActivities() {
+    private void listaCompletedActivities() {
 
         mAppDatabase = AppDatabase.getUserDatabase(getApplicationContext()); // instancia a la dabase de datos
         mActividadDAO = mAppDatabase.actividadDAO(); // crea la lista de consultar a utilizar
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
+
+                lista2 = mActividadDAO.getCompletedActividades();
+
+                if(lista2.size() >= 0)
+                {
+                    mLinearLayoutManager2 = new LinearLayoutManager(MainActivity.this);
+                    binding.recyclerviewCompleted.setLayoutManager(mLinearLayoutManager2);
+                    mLinearLayoutManager2.setStackFromEnd(true);
+                    mAdapter= new ActividadesAdapter(lista2,getApplicationContext());
+
+                    binding.recyclerviewCompleted.setAdapter(mAdapter);
+
+                }else
+                {
+                    Log.e("TAG","Actividades vacias");
+                }
+
+
+
+            }
+        }).start();
+
+    }
+
+    private void listaOnActivities() {
+
+        mAppDatabase = AppDatabase.getUserDatabase(getApplicationContext()); // instancia a la dabase de datos
+        mActividadDAO = mAppDatabase.actividadDAO(); // crea la lista de consultar a utilizar
 
             new Thread(new Runnable() {
                 @Override
