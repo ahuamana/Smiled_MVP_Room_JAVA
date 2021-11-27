@@ -5,12 +5,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.paparazziapps.mvp_smiled_java_room.MainActivity;
+import com.paparazziapps.mvp_smiled_java_room.appdatabase.AppDatabase;
 import com.paparazziapps.mvp_smiled_java_room.databinding.ActivityActividadInfoBinding;
+import com.paparazziapps.mvp_smiled_java_room.interfaces.ComentarioDAO;
+import com.paparazziapps.mvp_smiled_java_room.models.Comentario;
+
+import java.util.List;
 
 public class ActividadInfoActivity extends AppCompatActivity {
 
     ActivityActividadInfoBinding binding;
+
+    AppDatabase mAppDatabase;
+    ComentarioDAO mComentarioDAO;
+    Comentario mComentario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,10 +29,73 @@ public class ActividadInfoActivity extends AppCompatActivity {
         binding = ActivityActividadInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //Previuos Code
+        mAppDatabase = AppDatabase.getUserDatabase(getApplicationContext());
+        mComentarioDAO = mAppDatabase.comentarioDAO();
+
         //all code here
         showToolbar();
 
         openDetailsActividad();
+
+        createComment();
+
+    }
+
+    private void createComment() {
+
+
+        binding.send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        String message = binding.editTextMessage.getText().toString();
+
+                        if(message != null)
+                        {
+                            if(!message.isEmpty())
+                            {
+
+                                mComentario = new Comentario();
+                                mComentario.setCodigo_actividad(getIntent().getIntExtra("codigoActividad",1000));
+                                mComentario.setMensaje(message);
+                                mComentario.setUnixtime(System.currentTimeMillis() / 1000);
+
+                                mComentarioDAO.crearComentario(mComentario);
+                                binding.editTextMessage.setText("");
+
+                                //Main Threat
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "Actividad Creada!", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+
+                            }else
+                            {
+                                Log.e("TAG","Mensaje Vacio");
+                            }
+
+                        }else
+                        {
+                            Log.e("TAG","Mensaje Nulo");
+                        }
+
+
+                    }
+                }).start();
+
+            }
+        });
+
+
+
 
     }
 
@@ -36,7 +110,8 @@ public class ActividadInfoActivity extends AppCompatActivity {
            String descripcion= getIntent().getStringExtra("descripcion");
            String fecha_inicio= getIntent().getStringExtra("fecha_inicio");
            String fecha_fin= getIntent().getStringExtra("fecha_fin");
-           //String codigoActividad= getIntent().getStringExtra("codigoActividad");
+           //int codigoActividad= getIntent().getIntExtra("codigoActividad",0000);
+
 
            binding.mytoolbar.title.setText(titulo);
            binding.descripcion.setText(descripcion);

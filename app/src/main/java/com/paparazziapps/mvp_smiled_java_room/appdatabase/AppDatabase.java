@@ -7,12 +7,14 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.paparazziapps.mvp_smiled_java_room.interfaces.ActividadDAO;
+import com.paparazziapps.mvp_smiled_java_room.interfaces.ComentarioDAO;
 import com.paparazziapps.mvp_smiled_java_room.models.Actividad;
+import com.paparazziapps.mvp_smiled_java_room.models.Comentario;
 
 
 @Database(
-        entities = {Actividad.class},
-        version = 1
+        entities = {Actividad.class, Comentario.class},
+        version = 2
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -32,5 +34,8 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract ActividadDAO actividadDAO();
+
+    public abstract ComentarioDAO comentarioDAO();
+
 
 }

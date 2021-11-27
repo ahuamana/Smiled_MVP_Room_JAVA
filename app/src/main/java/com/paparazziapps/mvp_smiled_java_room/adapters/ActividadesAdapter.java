@@ -74,6 +74,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                 i.putExtra("fecha_inicio",mListActividades.get(position).fecha_inicio);
                 i.putExtra("fecha_fin",mListActividades.get(position).fecha_fin);
                 i.putExtra("codigoActividad",mListActividades.get(position).codigo);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
 
             }

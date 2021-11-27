@@ -16,5 +16,4 @@ public interface ComentarioDAO {
 
     @Query("Select * from comentarios where codigo_actividad = (:codigoReceived) order by unixtime desc ")
     List<Comentario> getAllComentsByUser(String codigoReceived);
-
 }

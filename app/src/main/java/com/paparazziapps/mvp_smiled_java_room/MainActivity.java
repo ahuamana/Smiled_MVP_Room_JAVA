@@ -112,9 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 if(lista2.size() >= 0)
                 {
                     mLinearLayoutManager = new LinearLayoutManager(MainActivity.this);
-                    binding.recyclerviewCompleted.setLayoutManager(mLinearLayoutManager);
                     mAdapter= new ActividadesAdapter(lista2,getApplicationContext());
-
                     binding.recyclerviewCompleted.setAdapter(mAdapter);
 
 

@@ -18,6 +18,37 @@ public class Comentario {
     public String mensaje;
 
     @ColumnInfo(name="unixtime")
-    public String unixtime;
+    public long unixtime;
 
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public int getCodigo_actividad() {
+        return codigo_actividad;
+    }
+
+    public void setCodigo_actividad(int codigo_actividad) {
+        this.codigo_actividad = codigo_actividad;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+    public long getUnixtime() {
+        return unixtime;
+    }
+
+    public void setUnixtime(long unixtime) {
+        this.unixtime = unixtime;
+    }
 }
