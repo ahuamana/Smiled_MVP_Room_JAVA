@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MVP_smiled_Java_Room">
         <activity
+            android:name=".activities.ActividadInfoActivity"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label=""
