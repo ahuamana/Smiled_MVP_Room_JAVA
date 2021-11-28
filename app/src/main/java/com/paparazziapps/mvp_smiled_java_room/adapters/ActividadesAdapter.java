@@ -51,7 +51,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
 
 
         holder.binding.activityNumber.setText("0"+ (mListActividades.size() - position));
-        holder.binding.titulo.setText( String.valueOf(mListActividades.get(position).titulo));
+        holder.binding.titulo.setText( mListActividades.get(position).titulo+ " - "+ mListActividades.get(position).numero );
         holder.binding.descripcion.setText(String.valueOf(mListActividades.get(position).contenido));
 
         holder.binding.fechaInicio.setText(String.valueOf(mListActividades.get(position).fecha_inicio));
