@@ -10,11 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.paparazziapps.mvp_smiled_java_room.databinding.ActivityActividadInfoBinding;
 import com.paparazziapps.mvp_smiled_java_room.ViewModels.ActividadInfoViewModel;
 import com.paparazziapps.mvp_smiled_java_room.adapters.ComentariosAdapter;
-import com.paparazziapps.mvp_smiled_java_room.appdatabase.AppDatabase;
-import com.paparazziapps.mvp_smiled_java_room.databinding.ActivityActividadInfoBinding;
-import com.paparazziapps.mvp_smiled_java_room.interfaces.ComentarioDAO;
 import com.paparazziapps.mvp_smiled_java_room.models.Comentario;
 
 import java.util.List;
@@ -22,10 +20,7 @@ import java.util.List;
 public class ActividadInfoActivity extends AppCompatActivity {
 
     ActivityActividadInfoBinding binding;
-
     ActividadInfoViewModel viewModel;
-
-
 
     Comentario mComentario;
 

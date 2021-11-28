@@ -3,6 +3,7 @@ package com.paparazziapps.mvp_smiled_java_room.interfaces;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.paparazziapps.mvp_smiled_java_room.models.Actividad;
 
@@ -20,4 +21,7 @@ public interface ActividadDAO {
 
     @Query("Select * from actividades where completed = 1 order by codigo desc")
     List<Actividad> getCompletedActividades();
+
+    @Query("update actividades set completed= :iscompleted where codigo = :codigo")
+    void updateActividad(int codigo, boolean iscompleted);
 }

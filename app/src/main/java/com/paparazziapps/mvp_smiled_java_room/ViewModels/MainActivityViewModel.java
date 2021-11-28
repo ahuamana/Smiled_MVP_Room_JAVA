@@ -73,16 +73,40 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
 
-    public void getActividadesCompleted()
+    public void updateIsCompletedActividad( int codigo, boolean isChecked, boolean isVisivility)
     {
+
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                getAllActivitiesCompleted();
-
+                appDatabase.actividadDAO().updateActividad(codigo, isChecked);
             }
         }).start();
+
+
+        if(isVisivility)
+        {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    getAllActivitiesCompleted();
+                }
+            }).start();
+
+        }else
+        {
+            new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                    getAllActivitiesNotCompleted();
+                }
+            }).start();
+
+        }
+
     }
 
 
