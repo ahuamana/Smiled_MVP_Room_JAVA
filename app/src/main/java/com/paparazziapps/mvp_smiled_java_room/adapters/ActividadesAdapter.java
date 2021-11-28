@@ -37,6 +37,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
     }
 
 
+
     @NonNull
     @Override
     public ActividadesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,7 +49,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
     @Override
     public void onBindViewHolder(@NonNull ActividadesAdapter.ViewHolder holder, int position) {
 
-        Log.e("TAG UNCOMPLETED","TAREA: "+ mListActividades.get(position).titulo);
+
         holder.binding.activityNumber.setText("0"+ (mListActividades.size() - position));
         holder.binding.titulo.setText( String.valueOf(mListActividades.get(position).titulo));
         holder.binding.descripcion.setText(String.valueOf(mListActividades.get(position).contenido));
@@ -58,12 +59,23 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
 
         if(mListActividades.get(position).isCompleted())
         {
+            Log.e("TAG COMPLETED","TAREA: "+ mListActividades.get(position).titulo);
+            Log.e("TAG COMPLETED","CHECKED: "+ mListActividades.get(position).isCompleted());
+
             holder.binding.checkBox.setChecked(true);
+        }else
+        {
+            if(mListActividades.get(position).isCompleted() == false)
+            {
+                Log.e("TAG UNCOMPLETED","TAREA: "+ mListActividades.get(position).titulo);
+                Log.e("TAG UNCOMPLETED","CHECKED: "+ mListActividades.get(position).isCompleted());
+                holder.binding.checkBox.setChecked(false);
+            }
         }
 
         openDetailsActivity(holder, position);
 
-        updateStatusActivities(holder, position);
+        //updateStatusActivities(holder, position);
 
     }
 

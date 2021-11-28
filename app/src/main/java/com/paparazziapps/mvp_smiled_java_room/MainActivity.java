@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     List<Actividad> lista;
 
-    boolean on;
+    boolean isVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,27 +69,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOptionsActivities() {
 
-        on = false;
+        isVisible = true;
 
         binding.mytoolbar.imageVisibility.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 
-                if(on == true)
+                if(isVisible == true)
                 {
-                    on = !on;
+                    isVisible = !isVisible;
                     binding.mytoolbar.imageVisibility.setImageResource(R.drawable.ic_visibility_off);
                     //Implement recycler with
-                    viewModel.getAllActivitiesNotCompleted();
+                    viewModel.getAllActivitiesCompleted();
 
                 }else
                 {
-                    on = !on;
+                    isVisible = !isVisible;
                     binding.mytoolbar.imageVisibility.setImageResource(R.drawable.ic_visibility);
-                    viewModel.getActividadesCompleted();
-
-
+                    viewModel.getAllActivitiesNotCompleted();
 
                 }
 
@@ -202,9 +200,12 @@ public class MainActivity extends AppCompatActivity {
 
                 if(actividads == null)
                 {
-                    Log.e("TAG","NO Actividades");
+                    //mAdapter.setActividadesList(actividads);
+                    binding.recyclerview.setVisibility(View.GONE);
+
                 }else
                 {
+                    binding.recyclerview.setVisibility(View.VISIBLE);
                     mAdapter.setActividadesList(actividads);
                 }
 
