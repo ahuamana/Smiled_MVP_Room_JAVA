@@ -16,6 +16,7 @@ import com.paparazziapps.mvp_smiled_java_room.databinding.ActivityActividadInfoB
 import com.paparazziapps.mvp_smiled_java_room.ViewModels.ActividadInfoViewModel;
 import com.paparazziapps.mvp_smiled_java_room.adapters.ComentariosAdapter;
 import com.paparazziapps.mvp_smiled_java_room.databinding.CardviewAddActivityBinding;
+import com.paparazziapps.mvp_smiled_java_room.databinding.CardviewEliminarActividadBinding;
 import com.paparazziapps.mvp_smiled_java_room.models.Actividad;
 import com.paparazziapps.mvp_smiled_java_room.models.Comentario;
 
@@ -60,6 +61,44 @@ public class ActividadInfoActivity extends AppCompatActivity {
             }
         });
 
+        binding.mytoolbar.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                eliminarAtividad();
+
+            }
+        });
+
+    }
+
+    private void eliminarAtividad() {
+
+        CardviewEliminarActividadBinding binding3;
+        binding3 = CardviewEliminarActividadBinding.inflate(getLayoutInflater());
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(binding3.getRoot());
+
+        binding3.cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        binding3.okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewModel.deleteActividad(getIntent().getIntExtra("codigoActividad",1000));
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        dialog.show();
 
     }
 
@@ -96,6 +135,11 @@ public class ActividadInfoActivity extends AppCompatActivity {
                     mActividad.setFecha_fin(binding2.fechaFin.getText().toString());
 
                     updateActividad(mActividad, dialog);
+
+                    binding.mytoolbar.title.setText(mActividad.getTitulo());
+                    binding.descripcion.setText(mActividad.getContenido());
+                    binding.fechaFin.setText(mActividad.getFecha_fin());
+
                 }
             });
 
@@ -232,6 +276,22 @@ public class ActividadInfoActivity extends AppCompatActivity {
                     mAdapter.setComentariosList(comentarios);
                     //show in the recyclerview
                 }
+            }
+        });
+
+
+        viewModel.getAmountCommentsObserver().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer amount) {
+
+                if(amount == null)
+                {
+                    binding.cantidadComentarios.setText("0");
+                }else
+                {
+                    binding.cantidadComentarios.setText(amount.toString());
+                }
+
             }
         });
 

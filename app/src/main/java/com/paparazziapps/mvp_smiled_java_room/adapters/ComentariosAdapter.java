@@ -29,6 +29,11 @@ public class ComentariosAdapter  extends RecyclerView.Adapter<ComentariosAdapter
         notifyDataSetChanged();
     }
 
+    public List<Comentario> getComentariosList()
+    {
+        return this.mListComentarios;
+    }
+
 
 
     @NonNull

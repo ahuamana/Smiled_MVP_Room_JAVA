@@ -1,6 +1,7 @@
 package com.paparazziapps.mvp_smiled_java_room.interfaces;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -27,4 +28,7 @@ public interface ActividadDAO {
 
     @Query("update actividades set titulo= :tituloReceived, contenido= :contenidoReceived, fecha_fin=:fechaReceived where codigo = :codigoReceived")
     void updateTituloContenidoFecha(int codigoReceived, String tituloReceived, String contenidoReceived, String fechaReceived);
+
+    @Query("Delete from actividades where codigo=:codeReceiver")
+    void deleteActividad(int codeReceiver);
 }

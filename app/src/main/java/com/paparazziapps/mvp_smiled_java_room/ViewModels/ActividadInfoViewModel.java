@@ -15,18 +15,39 @@ import java.util.List;
 public class ActividadInfoViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Comentario>> listOfComments;
+    private MutableLiveData<Integer> amountComments;
+
     AppDatabase appDatabase;
 
     public ActividadInfoViewModel(@NonNull Application application) {
         super(application);
 
         listOfComments = new MutableLiveData<>();
+        amountComments = new MutableLiveData<>();
         appDatabase = AppDatabase.getInstanceDatabase(getApplication().getApplicationContext());
     }
 
     public MutableLiveData<List<Comentario>> getComentarioListObserver()
     {
         return listOfComments;
+    }
+
+    public MutableLiveData<Integer> getAmountCommentsObserver()
+    {
+        return amountComments;
+    }
+
+    public  void getAllAcountCommnets(int codeReceived)
+    {
+        List<Comentario> comentariosList =appDatabase.comentarioDAO().getAllComentsByActividad(codeReceived);
+
+        if(comentariosList.size()>0)
+        {
+            amountComments.postValue(comentariosList.size());
+        }else
+        {
+            amountComments.postValue(null);
+        }
     }
 
 
@@ -66,11 +87,13 @@ public class ActividadInfoViewModel extends AndroidViewModel {
 
                 appDatabase.comentarioDAO().crearComentario(comentario);
                 getAllComentariosList(idReceiver);
+                getAllAcountCommnets(idReceiver);
 
             }
         }).start();
 
     }
+
 
     public void updateTituloContenidoFecha(Actividad actividad)
     {
@@ -79,6 +102,21 @@ public class ActividadInfoViewModel extends AndroidViewModel {
             public void run() {
 
                 appDatabase.actividadDAO().updateTituloContenidoFecha(actividad.getCodigo(), actividad.getTitulo(), actividad.getContenido(), actividad.getFecha_fin());
+
+            }
+        }).start();
+
+    }
+
+
+    public void deleteActividad(int codigo)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                appDatabase.actividadDAO().deleteActividad(codigo);
+
 
             }
         }).start();
