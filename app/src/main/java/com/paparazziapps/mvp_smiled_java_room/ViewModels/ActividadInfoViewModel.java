@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.paparazziapps.mvp_smiled_java_room.appdatabase.AppDatabase;
+import com.paparazziapps.mvp_smiled_java_room.models.Actividad;
 import com.paparazziapps.mvp_smiled_java_room.models.Comentario;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class ActividadInfoViewModel extends AndroidViewModel {
 
         if(comentariosList.size()>0)
         {
-              listOfComments.postValue(comentariosList);
+            listOfComments.postValue(comentariosList);
         }else
         {
             listOfComments.postValue(null);
@@ -70,5 +71,20 @@ public class ActividadInfoViewModel extends AndroidViewModel {
         }).start();
 
     }
+
+    public void updateTituloContenidoFecha(Actividad actividad)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                appDatabase.actividadDAO().updateTituloContenidoFecha(actividad.getCodigo(), actividad.getTitulo(), actividad.getContenido(), actividad.getFecha_fin());
+
+            }
+        }).start();
+
+    }
+
+
 
 }

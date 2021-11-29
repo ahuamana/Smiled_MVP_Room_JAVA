@@ -24,4 +24,7 @@ public interface ActividadDAO {
 
     @Query("update actividades set completed= :iscompleted where codigo = :codigo")
     void updateActividad(int codigo, boolean iscompleted);
+
+    @Query("update actividades set titulo= :tituloReceived, contenido= :contenidoReceived, fecha_fin=:fechaReceived where codigo = :codigoReceived")
+    void updateTituloContenidoFecha(int codigoReceived, String tituloReceived, String contenidoReceived, String fechaReceived);
 }

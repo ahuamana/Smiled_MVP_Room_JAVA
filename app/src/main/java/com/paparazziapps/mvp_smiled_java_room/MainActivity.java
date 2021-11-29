@@ -212,5 +212,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        Log.e("ONRESUME",""+ binding.mytoolbar.imageVisibility.getDrawable());
+
+        if(binding.mytoolbar.imageVisibility.getDrawable().toString() == "android.graphics.drawable.VectorDrawable@1a20fe4")
+        {
+            viewModel.getAllActivitiesNotCompleted();
+        }
+
+    }
 }
