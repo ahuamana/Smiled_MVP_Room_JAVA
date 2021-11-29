@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     List<Actividad> lista;
 
-    boolean on;
+    boolean isVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         //Constructores
-        mAdapter= new ActividadesAdapter( getApplicationContext());
+        mAdapter= new ActividadesAdapter(MainActivity.this);
         mLinearLayoutManager = new LinearLayoutManager(MainActivity.this);
 
 
@@ -69,27 +69,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOptionsActivities() {
 
-        on = false;
-
         binding.mytoolbar.imageVisibility.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 
-                if(on == true)
+                if(isVisible == true)
                 {
-                    on = !on;
+                    isVisible = !isVisible;
                     binding.mytoolbar.imageVisibility.setImageResource(R.drawable.ic_visibility_off);
                     //Implement recycler with
-                    viewModel.getAllActivitiesNotCompleted();
+                    viewModel.getAllActivitiesCompleted();
+                    Log.e("TAG","Show Actividades Completed");
 
                 }else
                 {
-                    on = !on;
+
+                    isVisible = !isVisible;
                     binding.mytoolbar.imageVisibility.setImageResource(R.drawable.ic_visibility);
-                    viewModel.getActividadesCompleted();
-
-
+                    viewModel.getAllActivitiesNotCompleted();
+                    Log.e("TAG","Show Actividades NOT Completed");
 
                 }
 
@@ -101,30 +100,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void listaOnActivities() {
+        lista = viewModel.getAllActivitiesNotCompleted();
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
+        if(lista.size() >= 0)
+        {
+            binding.recyclerview.setLayoutManager(mLinearLayoutManager);
+            mAdapter.setActividadesList(lista);
+            binding.recyclerview.setAdapter(mAdapter);
 
-
-                    lista = viewModel.getAllActivitiesNotCompleted();
-
-                    if(lista.size() >= 0)
-                    {
-                        binding.recyclerview.setLayoutManager(mLinearLayoutManager);
-                        mAdapter.setActividadesList(lista);
-                        binding.recyclerview.setAdapter(mAdapter);
-
-                    }else
-                    {
-                        Log.e("TAG","Actividades vacias");
-                    }
-
-
-
-                }
-            }).start();
-
+        }else
+        {
+            Log.e("TAG","Actividades vacias");
+        }
     }
 
     private void showToolbar() {
@@ -202,16 +189,39 @@ public class MainActivity extends AppCompatActivity {
 
                 if(actividads == null)
                 {
-                    Log.e("TAG","NO Actividades");
+                    //mAdapter.setActividadesList(actividads);
+                    binding.recyclerview.setVisibility(View.GONE);
+
                 }else
                 {
+                    binding.recyclerview.setVisibility(View.VISIBLE);
                     mAdapter.setActividadesList(actividads);
+
                 }
 
             }
         });
 
 
+
+    }
+
+    public void updateChecked(int codigo, boolean isChecked, boolean isVisible)
+    {
+        viewModel.updateIsCompletedActividad(codigo,isChecked, isVisible);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.e("ONRESUME",""+ binding.mytoolbar.imageVisibility.getDrawable());
+
+        if(binding.mytoolbar.imageVisibility.getDrawable().toString() == "android.graphics.drawable.VectorDrawable@1a20fe4")
+        {
+            viewModel.getAllActivitiesNotCompleted();
+        }
 
     }
 

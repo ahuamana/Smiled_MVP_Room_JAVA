@@ -5,17 +5,17 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="School App"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MVP_smiled_Java_Room">
         <activity
-            android:name=".activities.ActividadInfoActivity"
+            android:name="com.paparazziapps.mvp_smiled_java_room.activities.ActividadInfoActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:label=""
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.paparazziapps.mvp_smiled_java_room.MainActivity"
             android:exported="true"
             android:label=""
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">

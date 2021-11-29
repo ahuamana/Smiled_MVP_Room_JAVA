@@ -5,27 +5,31 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
+import com.paparazziapps.mvp_smiled_java_room.databinding.ActivityActividadInfoBinding;
 import com.paparazziapps.mvp_smiled_java_room.ViewModels.ActividadInfoViewModel;
 import com.paparazziapps.mvp_smiled_java_room.adapters.ComentariosAdapter;
-import com.paparazziapps.mvp_smiled_java_room.appdatabase.AppDatabase;
-import com.paparazziapps.mvp_smiled_java_room.databinding.ActivityActividadInfoBinding;
-import com.paparazziapps.mvp_smiled_java_room.interfaces.ComentarioDAO;
+import com.paparazziapps.mvp_smiled_java_room.databinding.CardviewAddActivityBinding;
+import com.paparazziapps.mvp_smiled_java_room.databinding.CardviewEliminarActividadBinding;
+import com.paparazziapps.mvp_smiled_java_room.models.Actividad;
 import com.paparazziapps.mvp_smiled_java_room.models.Comentario;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 public class ActividadInfoActivity extends AppCompatActivity {
 
     ActivityActividadInfoBinding binding;
-
     ActividadInfoViewModel viewModel;
-
-
 
     Comentario mComentario;
 
@@ -49,7 +53,105 @@ public class ActividadInfoActivity extends AppCompatActivity {
         createComment();
 
 
+        binding.mytoolbar.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //show dialog
+                editarActividad();
+            }
+        });
+
+        binding.mytoolbar.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                eliminarAtividad();
+
+            }
+        });
+
     }
+
+    private void eliminarAtividad() {
+
+        CardviewEliminarActividadBinding binding3;
+        binding3 = CardviewEliminarActividadBinding.inflate(getLayoutInflater());
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(binding3.getRoot());
+
+        binding3.cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        binding3.okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewModel.deleteActividad(getIntent().getIntExtra("codigoActividad",1000));
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    private void editarActividad() {
+
+            CardviewAddActivityBinding binding2;
+            binding2 = CardviewAddActivityBinding.inflate(getLayoutInflater());
+
+            final Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(binding2.getRoot());
+
+            binding2.name.setText("Editar Actividad");
+            binding2.titulo.setText(binding.mytoolbar.title.getText().toString());
+            binding2.contenido.setText(binding.descripcion.getText().toString());
+            binding2.fechaFin.setText(binding.fechaFin.getText().toString());
+
+            binding2.cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            binding2.okButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Actividad mActividad = new Actividad();
+                    mActividad.setContenido(binding2.contenido.getText().toString());
+                    mActividad.setCodigo(getIntent().getIntExtra("codigoActividad",1000));
+                    mActividad.setTitulo(binding2.titulo.getText().toString());
+                    mActividad.setFecha_fin(binding2.fechaFin.getText().toString());
+
+                    updateActividad(mActividad, dialog);
+
+                    binding.mytoolbar.title.setText(mActividad.getTitulo());
+                    binding.descripcion.setText(mActividad.getContenido());
+                    binding.fechaFin.setText(mActividad.getFecha_fin());
+
+                }
+            });
+
+            dialog.show();
+    }
+
+    private void updateActividad(Actividad mActividad, Dialog dialog) {
+
+        viewModel.updateTituloContenidoFecha(mActividad);
+        dialog.dismiss();
+    }
+
 
     private void createComment() {
 
@@ -178,5 +280,22 @@ public class ActividadInfoActivity extends AppCompatActivity {
         });
 
 
+        viewModel.getAmountCommentsObserver().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer amount) {
+
+                if(amount == null)
+                {
+                    binding.cantidadComentarios.setText("0");
+                }else
+                {
+                    binding.cantidadComentarios.setText(amount.toString());
+                }
+
+            }
+        });
+
+
     }
+
 }

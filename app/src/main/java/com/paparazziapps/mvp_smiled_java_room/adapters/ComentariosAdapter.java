@@ -3,7 +3,6 @@ package com.paparazziapps.mvp_smiled_java_room.adapters;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -30,6 +29,11 @@ public class ComentariosAdapter  extends RecyclerView.Adapter<ComentariosAdapter
         notifyDataSetChanged();
     }
 
+    public List<Comentario> getComentariosList()
+    {
+        return this.mListComentarios;
+    }
+
 
 
     @NonNull
@@ -51,9 +55,6 @@ public class ComentariosAdapter  extends RecyclerView.Adapter<ComentariosAdapter
             holder.binding.message.setText(mListComentarios.get(position).mensaje);
             Log.e("TAG","Comentario"+ mListComentarios.get(position).mensaje);
         }
-
-
-
 
 
     }
