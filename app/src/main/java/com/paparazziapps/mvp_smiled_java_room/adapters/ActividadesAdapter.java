@@ -19,6 +19,7 @@ import com.paparazziapps.mvp_smiled_java_room.activities.ActividadInfoActivity;
 import com.paparazziapps.mvp_smiled_java_room.models.Actividad;
 
 import java.util.List;
+import java.util.Random;
 
 public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.ViewHolder> {
 
@@ -49,9 +50,12 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
     @Override
     public void onBindViewHolder(@NonNull ActividadesAdapter.ViewHolder holder, int position) {
 
+        final int min = 1;
+        final int max = 20;
+        final int random = new Random().nextInt((max - min) + 1) + min;
 
         holder.binding.activityNumber.setText("0"+ (mListActividades.size() - position));
-        holder.binding.titulo.setText( mListActividades.get(position).titulo+ " - "+ mListActividades.get(position).numero );
+        holder.binding.titulo.setText( mListActividades.get(position).titulo+ " - "+ random );
         holder.binding.descripcion.setText(String.valueOf(mListActividades.get(position).contenido));
 
         holder.binding.fechaInicio.setText(String.valueOf(mListActividades.get(position).fecha_inicio));
